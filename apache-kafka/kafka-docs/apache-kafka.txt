@@ -1,0 +1,61 @@
+Apache kafka is a distributed publish-subscribe messaging system.
+
+Distributed means that apache kafka is fault tolerant, resiling system with ability to create a large clusters with many , many different severals that allow you to create fault tolerant system.
+And whenever any of the server fails or multiple server fails , other server will continue the operation and will continue serving publishers and subscribers.
+
+Apache kafka Broker ?
+
+In Every Publish -subscribe messaging system , messages need to be stored somewhere.
+Publishers should able to send messages somewhere and subscribers should be able to read from somewhere those messages. 
+And in kafka, brokers are responsible for all those operations. They store messages and they tell publishers and subscribers.
+
+What if there are hundred brokers in a kafka cluster and how those brokers synchronize b/w each other , how they talk to each other , how they agree and how to distribute workload. 
+
+Ans That’s where Zookeeper comes in.
+
+Kafka broker will not even start without active connection to zookeeper.
+
+Zookeeper is a mandatory part of apache kafka ecosystem and
+
+ main responsibilities of zookeeper   
+
+	1. Maintains list of active brokers
+	2. Elects Controller (controller is elected among cluster and there is a single controller in every cluster )
+	3. Manages configuration of topics and partitions ( topic is created at zookeeper level)
+
+DEFAULT PORTS OF ZOOKEEPER AND BROKER
+
+Zookeeper localhost:2181
+
+Kafka server (broker)  localhost:9092
+
+Multiple consumers and multiple producers could exchange messages via single centralized storage point  -kafka cluster
+
+Kafka simply stores old messages inside of the files. It works like a file system.
+Default log retention period is 7 days (168 hours).
+
+Kafka broker automatically creates a new system topic consumer offsets with 50 partitions.
+
+
+ZOOKEEPER CLUSTER (ENSEMBLE)
+
+If your setup contains hundreds of brokers then it is not safe to have it in one zookeeper. Usually cluster of zookeeper is created . Its known as zookeeper ensemble. It is recommended to have odd numbers of zookeeper in zookeeper ensemble. Why is that?
+
+In every zookeeper cluster you need to setup a so called quorum. Quoram is a minimal quantity of cells that should be up and running in order to form operational cluster. Otherwise if there are less cluster than quoram. Zookeeper cluster is considered down and all corresponding brokers that were connected to the disaster will also be down 
+
+ZOOKEEPER CLUSTER QUORAM
+It is recommended to have a odd number of servers in the zookeeper ensemble like 1,3,5,7 …etc. and quoram set to (n+1)/2  where n is qty of servers.
+
+
+DEFAULT PORTS OF ZOOKEEPER AND BROKER
+
+Zookeeper localhost:2181
+
+Kafka server (broker)  localhost:9092
+
+If we are going to launch multiple zookeepers on a single computer , we need to use different ports . If we need to run multiple zookeepers in a single computer , need to adjust configuration files and create separate configuration files for every zookeeper instance with different ports. It also a good idea to create a separate log folders for every instance. 
+
+Same relates to kafka broker. 
+It is possible to run multiple kafka brokers on a same computer and also you need to create a separate configuration of files for every instance of brokers .
+
+

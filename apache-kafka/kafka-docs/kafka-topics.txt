@@ -1,0 +1,132 @@
+KAFKA TOPIC
+
+Where are messages stored at every broker ?
+
+Every topic has its own unique name and they must be unique across kafka cluster an every message inside of the topic has a specific number called offset. And this number is assigned to every message when it arrives to a specific broker. And when times go by , every producer may append messages only to the end of the log.
+
+Every offset number and log record in broker is immutable.  The broker can delete old record or logs record that are expired.
+
+Default log retention period is 168 hours (7 days)
+
+
+MESSAGE STRUCTURE
+
+
+	1. TimeStamp (can be assigned either by kafka broker or producer). It is configurable
+	2. Offset number (Unique across partitions) offset number is unique only across partition in a specific topic.   
+	3. Key (Optional)   using key we are able to direct messages to specific partition.
+	4. Value (Sequence of bytes)
+
+Apache kafka purpose is to quickly send just small messages between producers and consumers.
+
+
+TOPICS AND PARTITIONS
+
+	So every topic may exist on different brokers that are included in a kafka cluster.
+	
+	Why do we need same topic on different brokers? Why don’t we just create on single broker?
+    Ans  For Fault Tolerance
+
+    How messages are spread among different brokers in such case , when same topic is present on different brokers ?
+	Ans  For that kafka uses partitions
+    Ex  topic A has two partition then first partition will be part of broker0 and second partition will be part of broker1
+
+    It is possible to create  topics with hundreds of different partitions that will be spread among multiple brokers.
+
+    Multiple partitions of same topic may exist on same broker. 
+
+
+MESSAGES  ACROSS PARTITIONS
+
+Partitions actually increase performance of entire kafka cluster.
+
+If we didn’t specify partition during creation of topic . By defult it will create a single partition and you have seen kafka broker has created a folder with (TopicA-0) that stores all messages for this particular partition. That means every partition is simply separate folder with files.
+If there are multiple partitions spread among different brokers then every broker may have one or multiple folders for every partition
+
+	Offset number is unique in partition but not in topic.
+
+	Producers may write messages to different partitions. Every producer can decide with partition to choose.	
+	Using partition we can have parallel performance of writing and reading operations.
+
+
+	Question?
+	What if broker1 will fail and partition1 with all messages inside of it will simply dissappear?
+	Ans In such case those messages inside partition1 will be simply lost. Because they are stored only in single place on a single broker.
+	There is a solution for this problem.  We can replicate messages inside of every partition. Copies of same message are stored on different brokers.
+
+
+PARTITION LEADER AND FOLLOWERS
+
+The problem if any of the brokers fails its partition simply disappears and message that was stored in that also disappear . That’s why its possible to create replicas of partitions.
+
+The problem if any of the brokers fails its partition simply disappears and message that was stored in that also disappear . That’s why its possible to create replicas of partitions.
+
+ new message arrives at partition0 and broker1 , it accepts write request from producer creates new message here in its partition0 and replicates this same message  in partition0 broker0 , partition0 broker2. now there are two replicas of same message. And if broker1 fails , then one of the other two broker becomes leader for the same partition.
+
+Main idea behind this application is the leader perform most operations.  It communicates with producers and consumers and also send its copies of every message to its followers. Followers simply wait and relax for new messages.
+
+It is recommended to create at least two replicas. 
+
+We can configure replication factor on a topic level and by default replication factor is set to 1.
+Replication factor 3 is a recommended number even for production.
+With replication factor in place , quantity of partitions basically multiplies by replication factor.
+
+
+
+CONTROLLER AND ITS RESPONSIBILITIES
+
+Partition leader :
+ Q1   who decides which broker will be leader for a particular partition?
+ Q2  How it is decided that partition0 will exist on broker0 and partition1 on broker1? Why they were spread and who decides that?
+ Q3 what happens if one of the broker fails then what will happen to the partition assigned to that broker?
+  ans this partition must be somehow reassigned to another broker of that topic
+
+
+Elect leaders , reassign partitions , create new partitions for new topics and so on … it’s a job of one of kafka brokers and such broker known as controller  . One of the kafka broker is selected as controller. This controller is elected by zookeeper.  Now its controller responsibility to create different partitions , to assign them to different brokers , reassign in case of failure of brokers. If there is a duplication configured on topic level , then that is the job to select leader for specific position and select followers.
+
+If controller fails , then new controller is elected by zookeeper.
+
+
+
+HOW PRODUCER WRITE MESSAGES TO THE TOPIC
+
+Every producer may produce messages to different partitions of specific topic.
+
+You can also setup it in such a way that it will write only to specific partition in case if you will use key with all messages and usually all messages with the same key will be read onto the same partition . But if you don’t supply key , then messages will be spread in round robin fashion across all partition in specific topic.
+
+
+TOPIC WITH MULTIPLE PARTITION
+
+
+bin/windows/kafka-topics.bat --bootstrap-server localhost:9092 --create --replication-factor 1 --partitions 3  --topic animals  
+
+Now go ahead and check logs  . In kafka-logs foler you can find three folders  (animals-0, animals-1, animals-2)
+
+Now go ahead and start console publisher to publish messages. 
+
+Producer
+bin/windows/kafka-console-producer.bat --bootstrap-server localhost:9092 --topic animals
+
+
+READ MESSAGES FROM A SPECIFIC PARTITION
+bin/windows/kafka-console-consumer.bat --bootstrap-server localhost:9092 --partition 1  --topic animals --from-beginning
+
+READING MESSAGES FROM SPECIFIC OFFSET IN SPECIFIC PARTITION
+bin/windows/kafka-console-consumer.bat  --bootstrap-server localhost:9092 --partition 1 --topic animals  --offset 1
+
+
+It is not possible to read from specific offset across entire topic. You must specify partition along with offset.
+
+READING DETAILS TOPIC AND CONSUMER OFFSETS TOPIC
+bin/windows/kafka-topics.bat  --bootstrap-server localhost:9092 --list  
+
+
+Each topic has partition , leader , replicas and Isr
+
+Isr => in sync replicas
+
+Have a look at partition - 0  :  its leader is broker-2 , replica is broker-2 and isr is broker-2
+Have a look at partition - 1  :  its leader is broker-1 , replica is broker-1 and isr is broker-1
+
+Check the details of default topic  => __consumer_offsets   
+ it has 50 partitions . It simply tracks location of every consumer in messages consumption process.

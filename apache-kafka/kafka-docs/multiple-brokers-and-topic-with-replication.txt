@@ -1,0 +1,21 @@
+MULTIPLE BROKERS AND TOPIC WITH REPLICATION
+
+create a topic with replication factor 3 .  It is suggested to don’t go replication factor beyond 3.
+
+bin/windows/kafka-topics.bat  --bootstrap-server localhost:9092,localhost:9093,localhost:9094  --create --replication-factor 3 --partitions 5 --topic months  (partitions are spread across three brokers)
+
+We have  partitions => 5 and replication factor => 3  . So totally (5*3 = 15 ) partitions are created in the cluster.
+
+
+We have 3 brokers in the cluster . So each broker will have 5 partitions . You can also check the log folder of kafka broker . You can see each log folder has 5 partitions.
+
+Now we should see same partitions in different brokers. Due to replication factor = 3 . If there are replicas  then one of the broker is leader for a specific partition and all the remaining brokers are followers . They simply accept write request from the leaders and they don’t sell producers and consumers for particular partition where they are not leaders.
+
+Only Leader broker in the partition serves producers and consumers.  And all the remaining borkers are just followers they simply synchronize messages with leader.
+
+
+topic description
+
+ bin/windows/kafka-topics.bat --bootstrap-server localhost:9092,localhost:9093,localhost:9094  --describe  --topic months
+
+ 

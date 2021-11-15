@@ -1,0 +1,45 @@
+LIST CONSUMER GROUPS
+bin/windows/kafka-consumer-groups.bat  --bootstrap-server localhost:9092 --list
+
+DEFAULT CONSUMER GROUP (console-consumer-26885)
+
+Let's imagine  there is some topic with multiple producers who send messages to it at the very high rates . Then single consumer may not be able to consume all produced messages at the same high rates. That's why consumers may be organized into consumer groups to share consumption of messages.
+
+To see details of a specific consumer group 
+
+bin/windows/kafka-consumer-groups.bat --bootstrap-server localhost:9092 --group console-consumer-26885  --describe
+
+Consumer group is automatically deleted when the last committed offset for the group expires (offset.retention.minutes - default 24 hours)
+
+
+
+Starting consumer in the custom consumer group
+
+START CONSOLE CONSUMER WITH SPECIFIC CONSUMER GROUP
+bin/windows/kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic numbers --group numbers-group --from-beginning
+
+Check details of custom consumer group
+bin/windows/kafka-consumer-groups.bat --bootstrap-server localhost:9092 --group numbers-group --describe
+
+We can see current-offset of all partitions.  Committed offsets (last offset received by consumer)
+LOG-END-OFFSET (Last offset of the messages in the partition)
+
+LAG will be non zero if CURRENT-OFFSET is less than LOG_END_OFFSET . It means that  "consumer has not yet consumed all messages in the partition".
+
+Starting second consumer in the same consumer group 
+
+bin/windows/kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic numbers --group numbers-group --from-beginning
+
+We notice that after execution of the command we see empty output. No single messages are consumed by this consumer , even though we have added beginning option.
+Ans : There was another consumer in the same group  ( numbers-group)  that has already consumed all the messages in this topic (numbers)
+
+
+Each message is consumed once only by single consumer in the group.
+
+
+Idle Consumers in the group ?
+
+What will happens if quantity of consumers in the group is larger than quantity of partitions in the topic?
+The extra consumer will be idle but if any of those consumer stops then the extra consumer will start consumption.
+
+If quantity of consumers in the consumer group is larger than quantity of partitions then some of the consumers will be idle and will not receive any messages.
