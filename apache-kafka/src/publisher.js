@@ -1,4 +1,4 @@
-const { Kafka } = require("kafkajs");
+const { Kafka , logLevel } = require("kafkajs");
 const Chance = require("chance");
 
 const chance = new Chance();
@@ -6,6 +6,7 @@ const chance = new Chance();
 const kafka = new Kafka({
   clientId: "my-app",
   brokers: ["localhost:9092", "localhost:9093", "localhost:9094"],
+  logLevel : logLevel.DEBUG
 });
 
 const topicName = "test-topic-1";
