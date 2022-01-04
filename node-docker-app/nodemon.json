@@ -5,7 +5,7 @@
         "ts" : "node --inspect=0.0.0.0:9229 --nolazy -r ts-node/register"
     },
     "env" :{
-        "APP_PORT": "8000",
+        "APP_PORT": "4000",
         "APP_NAME": "backend-node-microservice"
     }
 }
