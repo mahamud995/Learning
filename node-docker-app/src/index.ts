@@ -7,6 +7,7 @@ import { container } from "./infrastructure/ioc/ioc_container";
 
 
 export async function runApp() {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED='0'
     const appPort = Number(process.env.APP_PORT);
     const app = await bootstrap(container, appPort, containerModule);
     return app;
