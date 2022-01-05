@@ -134,3 +134,85 @@ docker rm -f $(docker -ps -a -q) (run the command in powershell) ![image](https:
   Volumes
 
 Docker volumes allows sharing of data . This could be files & folders  between Host and Containers  , between Containers.
+  
+  
+  	INTRODUCTION TO KUBERNETES
+	
+	
+	Kubernetes is a container orchestration tool. Originally developed by google.  It manages container (ex docker containers)
+	Helps you manage containerized applications (suppose your application is made of 100 or 1000 of containers)  in different environment.
+	
+	
+	The need for a container orchestration tool 
+	
+	1. Trend from monolith to Microservices
+	2. Increased usage of containers
+	3. Demand for a proper way of managing hundreds of containers.
+
+What features  do orchestration tool provides?
+ 1. High Availability (No Downtime)
+ 2. High Performance (High Scalibility)
+ 3. Disaater recovery
+	  
+	
+	
+	Kubernetes Architecture
+	
+	Kubernetes basic architecture  looks like
+	
+	Kubernetes cluster is made up of atleast one master node and connected to it you have a couple of worker nodes. Where each node has kubelet process running on it.
+	Kubelet is kubernetes process that makes it possible for cluster to talk to each other and to communicate each other and executes some tasks on those nodes.
+	Each worker node has docker containers of different applications deployed on it. 
+	Depending on how work load is distributed you have different no of docker containers running on Worker nodes. Worker nodes are there actual work is happening .  
+	On Worker nodes your application are running.
+	
+	Master node actually runs several kubernetes processes that are absolutely necessary to run and manage cluster properly.
+	One of such processes are
+	  1. API Server (which is also a container) => It is a entry point to the kubernetes cluster . This is the process to which different K8s client will talk to.
+	
+	
+	  2. Controller Manager => Keeps tracks of whats happening in the cluster  (if container dieds and it need to be restarted ..etc)
+	 3.  Scheduler  => Basically responsible for scheduling containers on different nodes based on work load and availability (Ensures pods placement)
+	 4. etcd (key value storage) =>  which basically holds at any time current state of k8s cluster . It holds all the configuration data and all the status data of each nodes and container (k8s backing key value store)
+	
+	
+    Virtual Network =>  which enables worker nodes and master node talk to each other . Virtual network turns all the nodes inside the cluster into one powerful machine that has sum of all resources of individual nodes.
+
+
+	
+	Worker nodes actually process more work load compared to master.
+	Master node is much more important than worker node . If you lose access to master node than you can't access cluster anymore. You always need to have backup of your master node.
+	
+	
+	KUBERNETES COMPONENTS
+	
+	Node :  which is basically a simple server (ex:  VM)
+	
+	
+	Pod : a smallest unit of k8s.  It is basically an abstraction over container. ( you only interact with k8s layer).  Usually one application per Pod.
+	Now let's check how pods communicate with each other . Each pods gets its own ip address. Pods can die easily and a new one gets created then a new IP-address is assigned. Because of it ,it will effect the pod communication. Because of that a another component is used (Service)
+	
+	
+	Service and Ingress
+	Service is basically a static IP address or permanent IP address.so that can be attached to each Pod. So each pod will have its own service.
+	The lifecycle of Pod and Service are not connected . So even pod dies , the service and its IP address will stay.
+	
+	
+	Now we want our application to be accessed via browser
+	For this we need to create an external service . It is service which opens communication  from external sources 
+	
+	Ingress : The external request for goes through the Ingress.
+	
+	
+	
+	
+	Pods communicate with each other using service.
+	
+	
+	configMap :  External configuration of the application (ex: DB connectionstring , other Urls..etc) . We cant keep DB credentials in configMap.
+	
+	
+	
+	Secret : Just like configMap but used to store secret data. Ex( DB password and username). Its stored in base64 encoded format. The built in security mechanism is not enabled by default.
+	We can access the configMap or secret values in application by using environment variables or as property file.
+
