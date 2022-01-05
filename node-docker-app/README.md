@@ -1,3 +1,6 @@
+
+References : https://www.youtube.com/watch?v=Wf2eSG3owoA (Docker and Kubernetes - Full Course for Beginners (**freeCodeCamp.org**))
+
 create an account in dockerhub.
 
 search for node image . in that click on how to use this image 
