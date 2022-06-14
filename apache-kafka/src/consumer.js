@@ -10,7 +10,7 @@ const topicName = "test-topic-1";
 
 const processConsumer = async () => {
   await consumer.connect();
-
+  console.log("Hi");
   await consumer.subscribe({ topic: topicName });
 
   await consumer.run({
