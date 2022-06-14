@@ -1,0 +1,22 @@
+<div #parent>
+    <div #divelement1>
+    Visible elements
+    </div>
+    <ng-container *ngIf="show">
+    <p #divelement2>
+    Hidden element 1
+    </p>
+    </ng-container>
+    <ng-container *ngIf="show">
+    <h5 #divelement3>
+    Hidden element 2
+    </h5>
+    </ng-container>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <button *ngIf="true" id="scrollHere" class="btn btn-primary" (click)="showIt()">Show Hidden Child
+        </button>
+        </div>
+    </div>

@@ -1,0 +1,10 @@
+<h1>Parent Component</h1>
+
+<h1>Enter a Message : </h1>
+<input [(ngModel)]="message" />
+
+<button (click)="sendpMessage()">send Message to Child</button>
+
+<h3>Message from the child ::</h3> {{parentmessage}}
+
+<app-child2 [childmessage]="childmessage" (messageEvent)="receivemessage($event)" ></app-child2>

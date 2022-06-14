@@ -1,0 +1,23 @@
+
+
+<nav>
+  <ul>
+<li><a routerLink="/parent-component" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" > Parent Component</a></li>
+<li><a routerLink="/child-component" routerLinkActive="active" > Child Component</a></li>
+<li><a routerLink="/hello-world" routerLinkActive="active" >hello-world</a></li>
+<li><a routerLink="/parent2" routerLinkActive="active">Parent2 Component</a></li>
+<li><a routerLink="/sibling1" routerLinkActive="active">Sibling1 Component</a></li>
+<li><a routerLink="/sibling2" routerLinkActive="active">Sibling2 Component</a></li>
+<li><a routerLink="/notification" routerLinkActive="active">Notifications</a></li>
+  </ul>
+</nav>
+<button #buttonClick  >click me</button>
+<router-outlet></router-outlet>
+<app-parent1></app-parent1>
+<!-- <app-hello-world></app-hello-world>
+<app-child>
+<h3 question>Is this ng-content cool?</h3>
+<p answer>Yeah its awesome</p>
+</app-child> -->
+
+<!-- <app-parent></app-parent> -->

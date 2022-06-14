@@ -1,0 +1,53 @@
+<p>child works! {{childMessage}}</p>
+
+<h2>Hello From Child</h2>
+<ng-content [question] ></ng-content>
+<ng-content [answer] ></ng-content>
+
+{{todaysDate | date}}
+{{todaysDate | date : 'short'}}
+{{todaysDate | date : 'long' | uppercase}}
+{{'Mahamud' | generatePipe}}
+
+<button [disabled] = "isDisabled" (click)="SendMessage()">Send Message</button>
+
+<img [src]="imagePath" >
+
+<div>
+    <button (click) = "dec()" >-</button>
+    <button (click) = "inc()" >+</button>
+    <label [style.font-size.px]="size">FontSize : {{size}}</label>
+</div>
+<div [ngClass]="isSpecial ? 'isSpecial' : ''" >Attribute Directives</div>
+
+<div [ngClass]="currentClasses" >Attribute Directives - Current Classes</div>
+<div [ngStyle]="currentStyles" >Attribute Directives - Ng Style</div>
+<label for="example" >{{name}}</label>
+<input id="example"[(ngModel)] ="name" />
+
+<h3 [appHighlight]="'red'" >App Highliter to test custom directive</h3>
+<div *ngIf="isActive" >Ng If Directive</div>
+
+<div *ngFor="let item of items; let i=index" >{{i}} : {{item.name}}</div>
+
+<div [ngSwitch]="item.name" >
+<div *ngSwitchCase = "'Mahamud'" > Hi Me</div>
+<div *ngSwitchCase = "'Afridi'" > Hi Bro</div>
+<div *ngSwitchDefault> Hi Friend</div>
+</div>
+
+{{model | json}}
+<form #petForm="ngForm" (ngSubmit)="onSubmit()" >
+    <div>
+        <label for="name" >Name</label>
+        <input type="text" id="name" required [(ngModel)]="model.name" name="name" />
+    </div>
+    <div>
+        <label for="specie" >Specie</label>
+        <select id="specie" required [(ngModel)]="model.specie" name="specie" >
+            <option  *ngFor="let specie of species" [value]="specie">{{specie}}</option>
+        </select>
+    </div>
+    <button [disabled]="!petForm.form.valid" type="submit" >Submit</button>
+</form>
+

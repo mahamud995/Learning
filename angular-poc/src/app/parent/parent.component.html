@@ -1,0 +1,23 @@
+<p>parent works!</p>
+
+<p>Template Variables</p>
+
+<input #phone placeholder="phone" />
+<button (click)="callPhone(phone.value)">call</button>
+
+<app-child [childMessage] = "'Hello from Parent'"  (messageEvent) = "receiveMessage($event)" [(size)]="fontSizepx" ></app-child>
+
+<p> Message received from Child ==== {{message}}</p>
+
+<p> viewChild {{displayChildMesage}} </p>
+
+<div [style.font-size.px]="fontSizepx" >Resizable Text</div>
+
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()" >
+    <label for="firstName">First Name:</label>
+    <input id="firstName"  type="text" formControlName="firstName" />
+    <label for="lastName"> Last Name:</label>
+    <input id="lastName"  type="text" formControlName="lastName" />
+
+    <button [disabled]="!profileForm.valid" >button</button>
+</form>

@@ -1,0 +1,8 @@
+<h1>Child Component</h1>
+
+<h1>Enter a Message : </h1>
+<input [(ngModel)]="parentmessage" />
+
+<button (click)="sendcMessage()">send Message to Parent</button>
+
+<h3>Message from parent ::</h3> {{childmessage}}
