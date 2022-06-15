@@ -34,7 +34,7 @@ import { Sibling2Component } from './interaction/sibling2/sibling2.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [LogService],
   bootstrap: [AppComponent]

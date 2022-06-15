@@ -31,6 +31,12 @@ const routes: Routes = [
     loadChildren : () => import("./notifications/notification.module").then(mod => mod.NotificationModule)
   },
   {
+    path : "template" , 
+    loadChildren : () => import("./template/template.module").then(mod => mod.TemplateModule)
+  },
+  { path: 'a', loadChildren: () => import('./modulea/modulea.module').then(m => m.ModuleaModule) },
+  { path: 'reactive', loadChildren: () => import('./reactive/reactive.module').then(m => m.ReactiveModule) },
+  {
     path : '**' , component : HelloWorldComponent
   }
 ];

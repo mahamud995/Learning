@@ -1,19 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { NotificationComponent } from './notification/notification.component';
+import { AccessGuardService } from '../guards/can_activate_guard';
 
 const NOTIFICATIONS_ROUTES: Routes = [
   {
     path: '',
-    component: NotificationComponent,
+    component: NotificationComponent, canActivate : [AccessGuardService]
   },
 ];
 
 @NgModule({
   declarations: [NotificationComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule.forChild(NOTIFICATIONS_ROUTES)
   ]
 })
 export class NotificationModule { }
